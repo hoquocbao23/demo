@@ -23,4 +23,9 @@ export class AppController {
     console.log ('sendEmail', this.configService.get('MAILER_FROM'));
     return this.emailService.sendPassword('hoquocbaold@gmail.com', '123456');
   }
+
+  @Post('email-resend')
+  sendEmailResend(): Promise<any> {
+    return this.emailService.sendEmailWithResend('hoquocbaold@gmail.com');
+  }
 }
