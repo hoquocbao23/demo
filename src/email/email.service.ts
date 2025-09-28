@@ -1,15 +1,15 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Resend } from 'resend';
 import { ConfigService } from '@nestjs/config';
+import { RESEND_CLIENT } from './resend.provider';
 
 @Injectable()
 export class EmailService {
   constructor(private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
-    private readonly resend: Resend,
+    @Inject(RESEND_CLIENT) private readonly resend: Resend,
   ) {
-    this.resend = new Resend(this.configService.get('RESEND_API_KEY'));
   }
 
   async sendEmail(
