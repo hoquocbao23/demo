@@ -7,7 +7,10 @@ import { ConfigService } from '@nestjs/config';
 export class EmailService {
   constructor(private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly resend: Resend,
+  ) {
+    this.resend = new Resend(this.configService.get('RESEND_API_KEY'));
+  }
 
   async sendEmail(
     email: string,
@@ -29,8 +32,8 @@ export class EmailService {
 
 
   async sendEmailWithResend(email: string) {
-    const resend = new Resend(this.configService.get('RESEND_API_KEY'));
-    const { data, error } = await resend.emails.send({
+    
+    const { data, error } = await this.resend.emails.send({
       from: this.configService.get('MAILER_USER') || 'Acme <onboarding@resend.dev>',
       to: [email], 
       subject: 'hello world',
